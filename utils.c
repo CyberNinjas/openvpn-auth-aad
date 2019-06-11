@@ -22,7 +22,7 @@
  */
 
 /*
- * OpenVPN plugin module to do PAM authentication using a split
+ * OpenVPN plugin module to do AAD authentication using a split
  * privilege model.
  */
 #ifdef HAVE_CONFIG_H

@@ -21,8 +21,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _PLUGIN_AUTH_PAM_UTILS__H
-#define _PLUGIN_AUTH_PAM_UTILS__H
+#ifndef _PLUGIN_AUTH_AAD_UTILS__H
+#define _PLUGIN_AUTH_AAD_UTILS__H
 
 /**
  *  Read 'tosearch', replace all occurrences of 'searchfor' with 'replacewith' and return
