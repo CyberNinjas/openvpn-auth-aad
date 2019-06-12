@@ -1,14 +1,15 @@
-OpenVPN plugin examples.
+# openvpn-auth-aad [![Build Status][travis-badge]][travis-url] [![GPL-2.0-only][gpl-badge]][gpl-license]
 
-Examples provided:
+_Azure Active Directory (AAD) OpenVPN Plugin_
 
-auth-aad.c -- using the --auth-user-pass-verify callback,
-            test deferred authentication.
+## Installation
 
-To build:
+```terminal
+./bootstrap.sh
+make
+```
 
-  ./build simple (Linux/BSD/etc.)
-
-To use in OpenVPN, add to config file:
-
-  plugin simple.so (Linux/BSD/etc.)
+[gpl-badge]: https://img.shields.io/badge/license-GPL-green.svg
+[gpl-license]: COPYING
+[travis-badge]: https://travis-ci.org/Jnchi/openvpn-auth-aad.svg?branch=master
+[travis-url]: https://travis-ci.org/Jnchi/openvpn-auth-aad
