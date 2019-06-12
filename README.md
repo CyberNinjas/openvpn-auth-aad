@@ -11,5 +11,5 @@ make
 
 [gpl-badge]: https://img.shields.io/badge/license-GPL-green.svg
 [gpl-license]: COPYING
-[travis-badge]: https://travis-ci.org/Jnchi/openvpn-auth-aad.svg?branch=master
-[travis-url]: https://travis-ci.org/Jnchi/openvpn-auth-aad
+[travis-badge]: https://travis-ci.org/CyberNinjas/openvpn-auth-aad.svg?branch=master
+[travis-url]: https://travis-ci.org/CyberNinjas/openvpn-auth-aad
