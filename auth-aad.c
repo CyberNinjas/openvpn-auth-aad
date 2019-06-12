@@ -65,20 +65,15 @@ struct plugin_per_client_context {
  * the envp array for its value, returning it
  * if found or NULL otherwise.
  */
-static const char *
-get_env(const char *name, const char *envp[])
+static const char *get_env(const char *name, const char *envp[])
 {
-    if (envp)
-    {
+    if (envp) {
         int i;
         const int namelen = strlen(name);
-        for (i = 0; envp[i]; ++i)
-        {
-            if (!strncmp(envp[i], name, namelen))
-            {
+        for (i = 0; envp[i]; ++i) {
+            if (!strncmp(envp[i], name, namelen)) {
                 const char *cp = envp[i] + namelen;
-                if (*cp == '=')
-                {
+                if (*cp == '=') {
                     return cp + 1;
                 }
             }
@@ -88,34 +83,27 @@ get_env(const char *name, const char *envp[])
 }
 
 /* used for safe printf of possible NULL strings */
-static const char *
-np(const char *str)
+static const char *np(const char *str)
 {
-    if (str)
-    {
+    if (str) {
         return str;
-    }
-    else
-    {
+    } else {
         return "[NULL]";
     }
 }
 
-static int
-atoi_null0(const char *str)
+static int atoi_null0(const char *str)
 {
-    if (str)
-    {
+    if (str) {
         return atoi(str);
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
 
 OPENVPN_EXPORT openvpn_plugin_handle_t
-openvpn_plugin_open_v1(unsigned int *type_mask, const char *argv[], const char *envp[])
+openvpn_plugin_open_v1(unsigned int *type_mask, const char *argv[],
+                       const char *envp[])
 {
     struct plugin_context *context;
 
@@ -124,7 +112,8 @@ openvpn_plugin_open_v1(unsigned int *type_mask, const char *argv[], const char *
     /*
      * Allocate our context
      */
-    context = (struct plugin_context *) calloc(1, sizeof(struct plugin_context));
+    context =
+        (struct plugin_context *) calloc(1, sizeof(struct plugin_context));
 
     context->aad_auth = atoi_null0(get_env("aad_auth", envp));
     printf("AAD_AUTH %d\n", context->aad_auth);
@@ -138,45 +127,38 @@ openvpn_plugin_open_v1(unsigned int *type_mask, const char *argv[], const char *
 }
 
 static int
-auth_user_verify(struct plugin_context *context, struct plugin_per_client_context *pcc, const char *argv[], const char *envp[])
+auth_user_verify(struct plugin_context *context,
+                 struct plugin_per_client_context *pcc, const char *argv[],
+                 const char *envp[])
 {
-    if (context->aad_auth)
-    {
+    if (context->aad_auth) {
         /* get username from envp string array */
         const char *username = get_env("username", envp);
 
-        /* get auth_control_file filename from envp string array*/
+        /* get auth_control_file filename from envp string array */
         const char *auth_control_file = get_env("auth_control_file", envp);
 
         printf("DEFER u='%s' acf='%s'\n",
-               np(username),
-               np(auth_control_file));
+               np(username), np(auth_control_file));
 
         /* Authenticate asynchronously in n seconds */
-        if (auth_control_file)
-        {
+        if (auth_control_file) {
             char buf[256];
             int auth = 2, ret;
             sscanf(username, "%d", &auth);
-            snprintf(buf, sizeof(buf), "( sleep %d ; echo AUTH %s %d ; echo %d >%s ) &",
-                     context->aad_auth,
-                     auth_control_file,
-                     auth,
-                     pcc->n_calls < auth,
-                     auth_control_file);
+            snprintf(buf, sizeof(buf),
+                     "( sleep %d ; echo AUTH %s %d ; echo %d >%s ) &",
+                     context->aad_auth, auth_control_file, auth,
+                     pcc->n_calls < auth, auth_control_file);
             printf("%s\n", buf);
             ret = system(buf);
-	    (void) ret;
+            (void) ret;
             pcc->n_calls++;
             return OPENVPN_PLUGIN_FUNC_DEFERRED;
-        }
-        else
-        {
+        } else {
             return OPENVPN_PLUGIN_FUNC_ERROR;
         }
-    }
-    else
-    {
+    } else {
         return OPENVPN_PLUGIN_FUNC_SUCCESS;
     }
 }
@@ -190,28 +172,29 @@ openvpn_plugin_func_v2(openvpn_plugin_handle_t handle,
                        struct openvpn_plugin_string_list **return_list)
 {
     struct plugin_context *context = (struct plugin_context *) handle;
-    struct plugin_per_client_context *pcc = (struct plugin_per_client_context *) per_client_context;
-printf("OPENVPN_PLUGIN_AUTH_USER_PASS_VERIFY\n");
-            return auth_user_verify(context, pcc, argv, envp);
+    struct plugin_per_client_context *pcc =
+        (struct plugin_per_client_context *) per_client_context;
+    printf("OPENVPN_PLUGIN_AUTH_USER_PASS_VERIFY\n");
+    return auth_user_verify(context, pcc, argv, envp);
 
 }
 
-OPENVPN_EXPORT void *
-openvpn_plugin_client_constructor_v1(openvpn_plugin_handle_t handle)
+OPENVPN_EXPORT void
+*openvpn_plugin_client_constructor_v1(openvpn_plugin_handle_t handle)
 {
     printf("FUNC: openvpn_plugin_client_constructor_v1\n");
     return calloc(1, sizeof(struct plugin_per_client_context));
 }
 
 OPENVPN_EXPORT void
-openvpn_plugin_client_destructor_v1(openvpn_plugin_handle_t handle, void *per_client_context)
+openvpn_plugin_client_destructor_v1(openvpn_plugin_handle_t handle,
+                                    void *per_client_context)
 {
     printf("FUNC: openvpn_plugin_client_destructor_v1\n");
     free(per_client_context);
 }
 
-OPENVPN_EXPORT void
-openvpn_plugin_close_v1(openvpn_plugin_handle_t handle)
+OPENVPN_EXPORT void openvpn_plugin_close_v1(openvpn_plugin_handle_t handle)
 {
     struct plugin_context *context = (struct plugin_context *) handle;
     printf("FUNC: openvpn_plugin_close_v1\n");
