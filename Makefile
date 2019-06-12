@@ -9,7 +9,7 @@ SRC_DIR = .
 all: auth-aad
 
 auth-aad:
-	${CC} ${CFLAGS} -fPIC -c $@.c \
+	${CC} ${CFLAGS} -fPIC $@.c \
 			-shared ${LDFLAGS} \
 			-I${SRC_DIR}/openvpn/include \
 			-Wl,-soname,$@.so -o $@.so -lc
