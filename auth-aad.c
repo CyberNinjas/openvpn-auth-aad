@@ -148,7 +148,7 @@ auth_user_verify(struct plugin_context *context, struct plugin_per_client_contex
         /* get auth_control_file filename from envp string array*/
         const char *auth_control_file = get_env("auth_control_file", envp);
 
-        printf("DEFER u='%s' p='%s' acf='%s'\n",
+        printf("DEFER u='%s' acf='%s'\n",
                np(username),
                np(auth_control_file));
 
@@ -156,7 +156,7 @@ auth_user_verify(struct plugin_context *context, struct plugin_per_client_contex
         if (auth_control_file)
         {
             char buf[256];
-            int auth = 2;
+            int auth = 2, ret;
             sscanf(username, "%d", &auth);
             snprintf(buf, sizeof(buf), "( sleep %d ; echo AUTH %s %d ; echo %d >%s ) &",
                      context->aad_auth,
@@ -165,7 +165,8 @@ auth_user_verify(struct plugin_context *context, struct plugin_per_client_contex
                      pcc->n_calls < auth,
                      auth_control_file);
             printf("%s\n", buf);
-            system(buf);
+            ret = system(buf);
+	    (void) ret;
             pcc->n_calls++;
             return OPENVPN_PLUGIN_FUNC_DEFERRED;
         }
@@ -178,12 +179,6 @@ auth_user_verify(struct plugin_context *context, struct plugin_per_client_contex
     {
         return OPENVPN_PLUGIN_FUNC_SUCCESS;
     }
-}
-
-static int
-tls_final(struct plugin_context *context, struct plugin_per_client_context *pcc, const char *argv[], const char *envp[])
-{
-    return OPENVPN_PLUGIN_FUNC_SUCCESS;
 }
 
 OPENVPN_EXPORT int
