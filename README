@@ -1,0 +1,14 @@
+OpenVPN plugin examples.
+
+Examples provided:
+
+auth-aad.c -- using the --auth-user-pass-verify callback,
+            test deferred authentication.
+
+To build:
+
+  ./build simple (Linux/BSD/etc.)
+
+To use in OpenVPN, add to config file:
+
+  plugin simple.so (Linux/BSD/etc.)

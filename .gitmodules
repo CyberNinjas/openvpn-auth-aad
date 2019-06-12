@@ -1,0 +1,6 @@
+[submodule "openvpn"]
+	path = openvpn
+	url = https://github.com/OpenVPN/openvpn
+[submodule "pam_aad"]
+	path = pam_aad
+	url = https://github.com/CyberNinjas/pam_aad

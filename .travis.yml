@@ -1,0 +1,6 @@
+language: c
+sudo: required
+services:
+- docker
+script:
+- docker build -t cyberninjas/openvpn-auth-aad .
