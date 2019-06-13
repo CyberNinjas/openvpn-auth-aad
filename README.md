@@ -9,6 +9,10 @@ _Azure Active Directory (AAD) OpenVPN Plugin_
 make
 ```
 
+## See also
+
+- https://github.com/mozilla-it/openvpn_defer_auth
+
 [gpl-badge]: https://img.shields.io/badge/license-GPL-green.svg
 [gpl-license]: COPYING
 [travis-badge]: https://travis-ci.org/CyberNinjas/openvpn-auth-aad.svg?branch=master
