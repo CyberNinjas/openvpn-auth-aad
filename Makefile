@@ -2,19 +2,23 @@ CC = gcc
 
 INDENT = indent
 
-CFLAGS = -O2 -Wall -g
+CFLAGS = -O2 -Wall -g -D_USE_EXTERNAL
+LDFLAGS = -Wl,--strip-debug -Wl,--build-id=none
+LDFLAGS += -fPIC -fno-stack-protector -Wl,--export-dynamic
+LIBS = -lc -lcurl -ljansson -ljwt -lpam -lsds -luuid
 
 SRC_DIR = .
+SRC = ${SRC_DIR}/auth_aad.c
+SRC += ${SRC_DIR}/pam_aad/pam_aad.c
+INCLUDES = -I${SRC_DIR}/openvpn/include
 
-all: auth-aad
 
-auth-aad:
-	${CC} ${CFLAGS} -fPIC $@.c \
-		         pam_aad/pam_aad.c \
-		        -D_USE_EXTERNAL \
-			-shared ${LDFLAGS} \
-			-I${SRC_DIR}/openvpn/include \
-			-Wl,-soname,$@.so -o $@.so -lc
+all: openvpn-auth-aad
+
+openvpn-auth-aad:
+	${CC} ${CFLAGS} ${LDFLAGS} -shared \
+		${SRC} ${INCLUDES} ${LIBS} \
+		-Wl,-soname,$@.so -o $@.so
 
 debug:
 	@LDFLAGS="${LDFLAGS} -ggdb" make
