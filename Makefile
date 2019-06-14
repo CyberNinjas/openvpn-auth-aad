@@ -10,6 +10,8 @@ all: auth-aad
 
 auth-aad:
 	${CC} ${CFLAGS} -fPIC $@.c \
+		         pam_aad/pam_aad.c \
+		        -D_USE_EXTERNAL \
 			-shared ${LDFLAGS} \
 			-I${SRC_DIR}/openvpn/include \
 			-Wl,-soname,$@.so -o $@.so -lc

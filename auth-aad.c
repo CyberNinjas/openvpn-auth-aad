@@ -35,12 +35,14 @@
  */
 #define OPENVPN_PLUGIN_VERSION_MIN 3
 
+extern int azure_authenticator(const char *user);
+
 /*
  * Our context, where we keep our state.
  */
 
 struct plugin_context {
-    char *script_path;
+	char *username;
 };
 
 void handle_sigchld(int sig)
@@ -77,8 +79,8 @@ openvpn_plugin_open_v3(const int struct_version,
     context = (struct plugin_context *) calloc(1, sizeof(struct plugin_context));
 
     if (arguments->argv[1]) {
-        context->script_path = strdup(arguments->argv[1]);
-        if (context->script_path == NULL) {
+        context->username = strdup(arguments->argv[1]);
+        if (context->username == NULL) {
             perror("Unable to allocate memory\n");
             exit(EXIT_FAILURE);
         }
@@ -100,7 +102,7 @@ deferred_auth_handler(struct plugin_context *context, const char *argv[], const 
 {
     pid_t pid;
     struct sigaction sa;
-    char *script = context->script_path;
+    char *username = context->username;
 
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART | SA_NOCLDSTOP;
@@ -123,14 +125,9 @@ deferred_auth_handler(struct plugin_context *context, const char *argv[], const 
          */
         return OPENVPN_PLUGIN_FUNC_DEFERRED;
     } else {
-        /*
-         * We're the child.  Invoke the script.
-         */
-        execve(script, &script, (char *const*)envp);
-        /*
-         * Since we exec'ed we should never get here.  But just in case, exit hard.
-         */
-        exit(127);
+        azure_authenticator(username);
+
+	exit(127);
     }
 
 }
@@ -160,7 +157,7 @@ OPENVPN_EXPORT void
 openvpn_plugin_close_v1(openvpn_plugin_handle_t handle)
 {
     struct plugin_context *context = (struct plugin_context *) handle;
-    free(context->script_path);
+    free(context->username);
     free(context);
 }
 
