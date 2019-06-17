@@ -11,6 +11,7 @@ make
 
 ## See also
 
+- https://github.com/fac/auth-script-openvpn
 - https://github.com/mozilla-it/openvpn_defer_auth
 
 [gpl-badge]: https://img.shields.io/badge/license-GPL-green.svg
