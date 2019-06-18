@@ -37,7 +37,7 @@
 extern int azure_authenticator(const char *user);       /* pam_aad.c */
 
 struct plugin_context {
-    int aad_auth;
+    char *aad_auth;
 };
 
 void handle_sigchld(int sig)
@@ -45,6 +45,18 @@ void handle_sigchld(int sig)
     while (waitpid((pid_t) (-1), 0, WNOHANG) > 0) {
         /* nonblocking wait (WNOHANG) for any child (-1) to come back */
     }
+}
+
+static int put_auth_control(const char *path, const char *data)
+{
+    int ret = EXIT_FAILURE;
+    FILE *f = fopen(path, "w");
+    if (f) {
+        if (fprintf(f, "%s", data) == 0)
+            ret = EXIT_SUCCESS;
+        fclose(f);
+    }
+    return ret;
 }
 
 OPENVPN_EXPORT int openvpn_plugin_min_version_required_v1()
@@ -70,7 +82,7 @@ openvpn_plugin_open_v3(const int structver,
     context =
         (struct plugin_context *) calloc(1, sizeof(struct plugin_context));
 
-    context->aad_auth = 1;      /* dummy value */
+    context->aad_auth = "1";      /* dummy value */
 
     /* Intercept the --auth-user-pass-verify callback. */
     ret->type_mask =
@@ -81,7 +93,8 @@ openvpn_plugin_open_v3(const int structver,
     return OPENVPN_PLUGIN_FUNC_SUCCESS;
 }
 
-static int azure_auth_handler(struct plugin_context *context, const char *argv[], const char *envp[])
+static int azure_auth_handler(struct plugin_context *context,
+                              const char *argv[], const char *envp[])
 {
     pid_t pid;
     struct sigaction sa;        /* signal.h */
@@ -103,8 +116,15 @@ static int azure_auth_handler(struct plugin_context *context, const char *argv[]
         /* We're the parent. Tell openvpn we're deferring. */
         return OPENVPN_PLUGIN_FUNC_DEFERRED;
     } else {
-        const char *username = get_env("username", envp);
-        azure_authenticator(username);
+        const char *username = get_env("username", envp),
+            *auth_control_file = get_env("auth_control_file", envp);
+
+        if (azure_authenticator(username) == 0) {
+            if (put_auth_control
+                (auth_control_file, (char *) context->aad_auth) == 0)
+                exit(EXIT_SUCCESS);
+        }
+
         exit(127);
     }
 
@@ -115,7 +135,8 @@ openvpn_plugin_func_v3(const int structver,
                        struct openvpn_plugin_args_func_in const *args,
                        struct openvpn_plugin_args_func_return *ret)
 {
-    struct plugin_context *context = (struct plugin_context *) args->handle;
+    struct plugin_context *context =
+        (struct plugin_context *) args->handle;
 
     /* Check API compatibility -- struct version or higher needed */
     if (structver < OPENVPN_PLUGIN_STRUCTVER)
