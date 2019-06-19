@@ -7,7 +7,20 @@ _Azure Active Directory (AAD) OpenVPN Plugin_
 ```terminal
 ./bootstrap.sh
 make
+sudo make install
 ```
+
+## Configuration
+
+Edit `/etc/openvpn/server.conf` and add the following lines:
+
+```txt
+plugin /usr/lib/openvpn/openvpn-auth-aad.so
+client-cert-not-required
+username-as-common-name
+```
+
+Note: A valid [pam_aad configuration file](https://github.com/CyberNinjas/pam_aad#configuration-file) is also required.
 
 ## See also
 
