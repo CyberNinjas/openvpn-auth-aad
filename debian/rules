@@ -8,3 +8,6 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 override_dh_auto_configure:
 	/bin/sh ./bootstrap.sh
 
+override_dh_auto_install:
+	mkdir -p $$(pwd)/usr/lib/openvpn/plugins
+	cp -a openvpn-auth-aad.so $$(pwd)/usr/lib/openvpn/plugins

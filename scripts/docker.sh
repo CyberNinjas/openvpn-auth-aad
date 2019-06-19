@@ -13,7 +13,9 @@ recursive_build() {
       if [ ! -z "${extra}" ]; then
         image="${tag}:${distro}-${extra}" # org/image:tag-extra
       fi
-      docker build -t "${image}" "${path}" \
+      docker build --build-arg VERSION=0.0.1 \
+                   --build-arg DEBVER=1 \
+                   -t "${image}" "${path}" \
                    -f "${dir}/Dockerfile"
     fi
   done

@@ -1,0 +1,5 @@
+openvpn-auth-aad (0.0.1-1) UNRELEASED; urgency=medium
+
+  * Initial release.
+
+ -- Lucas Ramage <lramage@cyberninjas.com>  Wed, 19 Jun 2019 18:07:48 +0000
