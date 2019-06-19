@@ -2,10 +2,5 @@ language: c
 sudo: required
 services:
 - docker
-before_script:
-- git submodule update --init --recursive
-- cd pam_aad 
-- docker build -t cyberninjas/pam_aad:ubuntu -f docker/ubuntu/Dockerfile .
-- cd ..
 script:
-- docker build -t cyberninjas/openvpn-auth-aad .
+- /bin/sh ./scripts/docker.sh
