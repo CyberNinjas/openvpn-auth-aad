@@ -2,12 +2,26 @@
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+OPENVPN_VERSION = bebd25a0e3a2aba0b1f98463a87b24db6c419a66
+
 %:
 	dh $@
 
-override_dh_auto_configure:
-	/bin/sh ./bootstrap.sh
+override_dh_auto_configure: clean-submodules openvpn pam_aad
+	echo "skipping configure ..."
+
+openvpn:
+	git clone https://github.com/openvpn/openvpn.git
+	cd openvpn && git checkout ${OPENVPN_VERSION} && autoreconf -fiv && ./configure
+
+pam_aad:
+	git clone https://github.com/cyberninjas/pam_aad.git
+	cd pam_aad && git checkout tags/0.0.3 && ./bootstrap.sh && ./configure
+
+clean-submodules:
+	rm -rf openvpn pam_aad
 
 override_dh_auto_install:
 	mkdir -p $$(pwd)/usr/lib/openvpn/plugins
 	cp -a openvpn-auth-aad.so $$(pwd)/usr/lib/openvpn/plugins
+

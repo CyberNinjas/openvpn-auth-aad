@@ -13,8 +13,7 @@ COPY . /usr/src/openvpn-auth-aad
 RUN useradd -m dev -s /bin/bash && \
     chown -R dev:dev /usr/src/openvpn-auth-aad
 
-RUN ./bootstrap.sh && \
-    tar cvzf "../openvpn-auth-aad_${VERSION}.orig.tar.gz" --exclude='.git*' . && \
+RUN tar cvzf "../openvpn-auth-aad_${VERSION}.orig.tar.gz" --exclude='.git*' . && \
     debuild -us -uc -d -i'(.*)' && \
     dpkg -i "../openvpn-auth-aad_${VERSION}-${DEBVER}_amd64.deb"
 
