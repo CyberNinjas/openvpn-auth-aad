@@ -3,14 +3,15 @@ sudo: required
 services:
 - docker
 script:
-- /bin/sh ./scripts/docker.sh
-- docker run -v $(pwd):/usr/src/openvpn-auth-aad cyberninjas/openvpn-auth-aad:debian /bin/sh -c "cp /usr/src/*.deb /usr/src/openvpn-auth-aad"
+- "/bin/sh ./scripts/docker.sh"
+- docker run -v $(pwd):/usr/src/openvpn-auth-aad cyberninjas/openvpn-auth-aad:debian
+  /bin/sh -c "cp /usr/src/*.deb /usr/src/openvpn-auth-aad"
 deploy:
   provider: bintray
   file: bintray.json
   user: jnchi
   key:
-    secure: FBvhZ56Cx593d0sTMF/D37RKN8b8IflfFRqZP7n5IHO023Kp/z2YN7C9dkCjdLcspKkIvnuBMb6fr3IjZR8WOBPvhpxxDrw03ezLFXYdIBHeu17U2UtAisUo14MHT22EJslat6OQN/QL4pkwgjv3XOJNAdixaD80q7TSpwbiVws8EhVUOtCLoAGr/5MebLkvF+XYoWHn5FSMfmXHicPPfk+zUDnTRpdCgaIIeTBCgOYKc3d3jKRUnZZkSyGEkGKer4EBW7HuZsIcp8MbJty/dsCXPU6Se264bbLXN1bTsaRI6MEkLbLJrswYIasSuHyAavOclRLDQeUkTf6bf7qr58D+yseewpTEDRhNWyH2sW9/ptLZ17lAPP5He6tdwZhXdsDxr9QhXNoyZ312hizg1WXF/1gVEuR7ruqjh1cEN0LpFeWTrlj7mwMR9+uuKLAW8CnxUJNFcJi2sNSfx2CepXnmuoJIhk75gC3WhXqhF+ctnxYCwYihIEyrubioPwZsHxbqi8WCSEiiHJ6s+3v93oJdSHmSrPu/K/vp+0hKnPBqEgAacA1VbiiSeEJDNRUVzuSDEaPM2XiSI8D/IMwWodV7rw0VGLt1uDD1tV2kE3JOBLyDO+A3eHZd3eZX2TXy+bzpV7KykwD4tw/1Gpg0CBXvgDEJvnkWPJbEvLXtMKM=
+    secure: WqI4qNH5ln6B0StwBc0HlRt/TaHcO7GfA+2QijEhkveCoKkr9G1o5uA2bRk8JAMgIqPIakv7OiBMQQGA9ANnxbUFKkyHMu7CqIg4NowyE6PZTqnBoqzL69ty7lQeK9hS+EDFzhZSBxLrTVaJIXDHZ5i1hU+tCWa/JjSz3u38GD3AzW8jOLr3sTcI/nzddK6Kxxlwcl1WnxBbiZBO0u0Ok7uwgLCHnLF1f9872wWsqoSKSI6IdWhrKVtiz1NMWzMdDaGYnuxsVYJjaAbZt93Wg8DYIm2TSG4sx3V7N0pfRyElLUu+2ubn9o/L4IUZ007zbQohAcRnfepEUfnEx39EfMrCa05bAFkxA5B+y+aVGkYmDKQPOTO/fz1f0lO0L68Sp9d9ZSIT2H4nOh/uxUYYUut3GTNa5cZnSILiMXNaxGcNG3jmGRluNG9SIbVixNXP8gkuciyyclI+UhxvqgLcxntpEzGSmBEB9giLe01Up5GtIHdvZHMvoPpf+fZ+8kzR+LyGlLd85xji9/U4CjgWrnqeJId6C+5RHJhDPnI6COuaNDc5v4gIxrX509M8CrBlkiAfozyOFhqt4Wrn5RqGHgTRMS4GNM2urmk3NwcDWxzX9h8ZVoJXw4nII1w1RehaM/4JU43cc81G2hotTWwBrMqtuUFa/Rl1LRYee8zEUGM=
   skip_cleanup: true
   on:
     tags: true
