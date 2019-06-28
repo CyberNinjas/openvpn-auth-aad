@@ -23,9 +23,13 @@ recursive_build() {
 
 main() {
   DEFAULT_IMAGE="cyberninjas/openvpn-auth-aad"
+  RELEASE=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+  export RELEASE
 
   # Build all docker images
   recursive_build . "${DEFAULT_IMAGE}" ''
+
+  sed "s/{{version}}/${RELEASE}/" .bintray.json.in > bintray.json
 }
 
 main

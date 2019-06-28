@@ -4,3 +4,6 @@ services:
 - docker
 script:
 - /bin/sh ./scripts/docker.sh
+- > docker run -v $(pwd):/usr/src/openvpn-auth-aad
+    cyberninjas/openvpn-auth-aad:debian
+    /bin/sh -c "cp /usr/src/*.deb /usr/src/openvpn-auth-aad"
