@@ -5,15 +5,12 @@ set -eu
 recursive_build() {
   path=$1
   tag=$2
-  extra=$3
+  release=$3
   for dir in $path/docker/*; do
     if [ -d "${dir}" ]; then
       distro=$(basename "${dir}")
       image="${tag}:${distro}" # org/image:tag
-      if [ ! -z "${extra}" ]; then
-        image="${tag}:${distro}-${extra}" # org/image:tag-extra
-      fi
-      docker build --build-arg VERSION=0.0.1 \
+      docker build --build-arg VERSION="${release}" \
                    --build-arg DEBVER=1 \
                    -t "${image}" "${path}" \
                    -f "${dir}/Dockerfile"
@@ -27,7 +24,7 @@ main() {
   export RELEASE
 
   # Build all docker images
-  recursive_build . "${DEFAULT_IMAGE}" ''
+  recursive_build . "${DEFAULT_IMAGE}" "${RELEASE}"
 
   sed "s/{{version}}/${RELEASE}/" .bintray.json.in > bintray.json
 }
