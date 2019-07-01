@@ -1,4 +1,4 @@
-# openvpn-auth-aad [![Build Status][travis-badge]][travis-url] [![GPL-2.0-only][gpl-badge]][gpl-license]
+# openvpn-auth-aad [![Build Status][travis-badge]][travis-url] [![GPL-2.0-only][gpl-badge]][gpl-license] [![Download](https://api.bintray.com/packages/jnchi/aad/openvpn-auth-aad/images/download.svg) ](https://bintray.com/jnchi/aad/openvpn-auth-aad/_latestVersion)
 
 _Azure Active Directory (AAD) OpenVPN Plugin_
 
