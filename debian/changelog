@@ -1,3 +1,9 @@
+openvpn-auth-aad (0.0.2-1) UNRELEASED; urgency=medium
+
+  * Bump pam_aad to version 0.0.4 
+
+ -- Lucas Ramage <lramage@cyberninjas.com>  Thu, 15 Aug 2019 16:01:23 +0000
+
 openvpn-auth-aad (0.0.1-1) UNRELEASED; urgency=medium
 
   * Initial release.

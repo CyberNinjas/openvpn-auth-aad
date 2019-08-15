@@ -4,3 +4,4 @@ test/*
 *.log
 *.json
 *.deb
+bintray.json
