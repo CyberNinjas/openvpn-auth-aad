@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: openvpn-auth-aad
+Upstream-Contact: Lucas Ramage <lramage@cyberninjas.com>
+Source: https://github.com/CyberNinjas/openvpn-auth-aad
+
+Files: *
+Copyright: 2019 CyberNinjas <info@cyberninjas.com>
+License: GPL-2
+  [LICENSE TEXT]
+

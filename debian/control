@@ -1,0 +1,20 @@
+Source: openvpn-auth-aad
+Maintainer: Lucas Ramage <lramage@cyberninjas.com>
+Section: net
+Priority: extra
+Standards-Version: 3.9.8
+Build-Depends:
+ debhelper (>=9), git, libtool,
+ libcurl4-openssl-dev, libjansson-dev, libjwt-dev,
+ libpam0g-dev, libsds-dev, libssl-dev, pkg-config, uuid-dev
+Vcs-Git: https://github.com/CyberNinjas/openvpn-auth-aad.git
+Vcs-Browser: https://github.com/CyberNinjas/openvpn-auth-aad
+Homepage: https://github.com/CyberNinjas/openvpn-auth-aad
+
+Package: openvpn-auth-aad
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpam-aad (>=0.0.2-1), openvpn (>=2.4)
+Description: Azure Active Directory OpenVPN Plugin
+ This OpenVPN plugin aims to provide Azure Active Directory authentication for Linux.
+ .
+
